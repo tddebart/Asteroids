@@ -5,44 +5,52 @@
 
 #include <iostream>
 #include <vector>
+
 #include <SDL.h>
 #include <SDL_image.h>
-#include "draw.cpp"
 #include <windows.h>
-#include "Entity.cpp"
+
+#include "Draw.h"
+#include "Entities/Player.cpp"
+#include "Entities/Star.cpp"
 
 using namespace std;
 
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-vector<Entity> entities;
+vector<Entity*> entities;
 
 bool done = false;
-
 void initSDL();
 void doInput();
 
 int main() {
     initSDL();
+    srand(time(nullptr));
+    
+    // Add stars
+    for (int i = 0; i < 200; i++) {
+        Star* star = new Star(nullptr, Vector2(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT));
+        entities.push_back(star);
+    }
 
     auto shuttle = loadTexture(renderer,"assets/shuttle.png");
     
     // Add entities
-    auto player = Entity(shuttle);
-    player.position.x = 100;
-    player.position.y = 100;
-    entities.push_back(player);
+    auto player = Player(shuttle, Vector2(100,100));
+    entities.push_back(&player);
 
 
     while (!done) {
         doInput();
 
-        SDL_SetRenderDrawColor(renderer, 96, 128,255,255);
+        SDL_SetRenderDrawColor(renderer, 0, 0,0,255);
         SDL_RenderClear(renderer);
 
         for (auto entity: entities) {
-            drawTexture(renderer, entity.texture, entity.position.x, entity.position.y);
+            entity->update();
+            entity->draw(renderer);
         }
         
         SDL_RenderPresent(renderer);
