@@ -1,6 +1,7 @@
 ﻿#include "Entity.h"
 #include "../Input.h"
 #include "Projectile.cpp"
+#include <chrono>
 
 #define PLAYER_SIZE 52
 
@@ -11,6 +12,8 @@ public:
     std::vector<Projectile> projectiles;
     
     const float speed = 0.1f;
+    
+    std::chrono::time_point<std::chrono::system_clock> lastShot = std::chrono::system_clock::now();
 
     void update() override {
         input();
@@ -70,8 +73,9 @@ public:
             angle += 1;
         }
         
-        if (isKeyPressed(SDL_SCANCODE_SPACE)) {
+        if (isKeyPressed(SDL_SCANCODE_SPACE) && std::chrono::system_clock::now() - lastShot > std::chrono::milliseconds(200)) {
             projectiles.emplace_back(position + Vector2(PLAYER_SIZE/2.0f, PLAYER_SIZE/2.0f), angle);
+            lastShot = std::chrono::system_clock::now();
         }
     }
 };
