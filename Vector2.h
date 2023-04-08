@@ -1,6 +1,15 @@
-﻿struct Vector2
+﻿#define _USE_MATH_DEFINES
+#include <cmath>
+#include <cstdlib>
+
+struct Vector2
 {
     float x, y;
+    
+    // Get angle in degrees
+    float getAngle() const {
+        return atan2(y, x) * 180 / M_PI;
+    }
     
     // Vector2 * scalar
     Vector2 operator * (float scalar) const {
@@ -19,6 +28,11 @@
         x += other.x;
         y += other.y;
         return *this;
+    }
+    
+    // Vector2 + Vector2
+    Vector2 operator + (const Vector2& other) const {
+        return Vector2(x + other.x, y + other.y);
     }
 };
 

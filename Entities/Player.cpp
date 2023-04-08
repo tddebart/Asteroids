@@ -1,27 +1,19 @@
 ﻿#include "Entity.h"
 #include "../Input.h"
+#include "Projectile.cpp"
+
+#define PLAYER_SIZE 52
 
 class Player : public Entity {
 public:
     using Entity::Entity;
 
-    const float speed = 0.2;
+    std::vector<Projectile> projectiles;
+    
+    const float speed = 0.1f;
 
     void update() override {
-        if (isKeyPressed(SDL_SCANCODE_W)) {
-            velocity.x += speed * sin(angle * M_PI / 180);
-            velocity.y -= speed * cos(angle * M_PI / 180);
-        }
-        if (isKeyPressed(SDL_SCANCODE_S)) {
-            velocity.x -= speed * sin(angle * M_PI / 180);
-            velocity.y += speed * cos(angle * M_PI / 180);
-        }
-        if (isKeyPressed(SDL_SCANCODE_A)) {
-            angle -= 1;
-        }
-        if (isKeyPressed(SDL_SCANCODE_D)) {
-            angle += 1;
-        }
+        input();
 
         position += velocity;
 
@@ -39,6 +31,47 @@ public:
         }
         if (position.y > SCREEN_HEIGHT + 50) {
             position.y = -50;
+        }
+        
+        for (auto &projectile : projectiles) {
+            projectile.update();
+        }
+        
+        auto item = std::find_if(projectiles.begin(), projectiles.end(), [](Projectile &projectile) {
+            return projectile.position.x < 0 || projectile.position.x > SCREEN_WIDTH || projectile.position.y < 0 || projectile.position.y > SCREEN_HEIGHT;
+        });
+        
+        if (item != projectiles.end()) {
+            projectiles.erase(item);
+        }
+    }
+    
+    void draw(SDL_Renderer *renderer) override {
+        for (auto &projectile : projectiles) {
+            projectile.draw(renderer);
+        }
+        
+        Entity::draw(renderer);
+    }
+    
+    void input() {
+        if (isKeyPressed(SDL_SCANCODE_W)) {
+            velocity.x += speed * sin(angle * M_PI / 180);
+            velocity.y -= speed * cos(angle * M_PI / 180);
+        }
+        if (isKeyPressed(SDL_SCANCODE_S)) {
+            velocity.x -= speed * sin(angle * M_PI / 180);
+            velocity.y += speed * cos(angle * M_PI / 180);
+        }
+        if (isKeyPressed(SDL_SCANCODE_A)) {
+            angle -= 1;
+        }
+        if (isKeyPressed(SDL_SCANCODE_D)) {
+            angle += 1;
+        }
+        
+        if (isKeyPressed(SDL_SCANCODE_SPACE)) {
+            projectiles.emplace_back(position + Vector2(PLAYER_SIZE/2.0f, PLAYER_SIZE/2.0f), angle);
         }
     }
 };
