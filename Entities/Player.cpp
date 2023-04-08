@@ -1,15 +1,18 @@
 ﻿#include "Entity.h"
 #include "../Input.h"
 #include "Projectile.cpp"
+#include "../ScreenInfo.h"
 #include <chrono>
 
 #define PLAYER_SIZE 52
+
+using namespace std;
 
 class Player : public Entity {
 public:
     using Entity::Entity;
 
-    std::vector<Projectile> projectiles;
+    std::vector<Projectile*> projectiles;
     
     const float speed = 0.1f;
     
@@ -37,21 +40,17 @@ public:
         }
         
         for (auto &projectile : projectiles) {
-            projectile.update();
-        }
-        
-        auto item = std::find_if(projectiles.begin(), projectiles.end(), [](Projectile &projectile) {
-            return projectile.position.x < 0 || projectile.position.x > SCREEN_WIDTH || projectile.position.y < 0 || projectile.position.y > SCREEN_HEIGHT;
-        });
-        
-        if (item != projectiles.end()) {
-            projectiles.erase(item);
+            projectile->update();
+            
+            if (projectile->remove) {
+                projectiles.erase(std::remove(projectiles.begin(), projectiles.end(), projectile), projectiles.end());
+            }
         }
     }
     
     void draw(SDL_Renderer *renderer) override {
         for (auto &projectile : projectiles) {
-            projectile.draw(renderer);
+            projectile->draw(renderer);
         }
         
         Entity::draw(renderer);
@@ -74,7 +73,7 @@ public:
         }
         
         if (isKeyPressed(SDL_SCANCODE_SPACE) && std::chrono::system_clock::now() - lastShot > std::chrono::milliseconds(200)) {
-            projectiles.emplace_back(position + Vector2(PLAYER_SIZE/2.0f, PLAYER_SIZE/2.0f), angle);
+            projectiles.push_back(new Projectile(position + Vector2(PLAYER_SIZE/2.0f, PLAYER_SIZE/2.0f), angle));
             lastShot = std::chrono::system_clock::now();
         }
     }

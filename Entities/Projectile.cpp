@@ -1,16 +1,30 @@
 ﻿#include "Entity.h"
+#include "OffScreenEntity.h"
+#include <chrono>
 
-class Projectile : public Entity
+class Projectile : public OffScreenEntity
 {
 public:
-    Projectile(Vector2 position, int angle) : Entity(nullptr, position) {
+    std::chrono::time_point<std::chrono::system_clock> spawned = std::chrono::system_clock::now();
+    
+    const float speed = 1.75f;
+    const int lifetime = 2000;
+    
+    Projectile(Vector2 position, int angle) : OffScreenEntity(nullptr, position) {
         this->angle = angle - 90;
         float rad = this->angle * M_PI / 180.0f;
-        velocity = Vector2(cos(rad), sin(rad)) * 1.2;
+        velocity = Vector2(cos(rad), sin(rad)) * speed;
+        offScreenMargin = 10;
     }
 
     void update() override {
         position += velocity;
+        
+        checkOffScreen();
+        
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - spawned).count() > lifetime) {
+            remove = true;
+        }
     }
     
     void draw(SDL_Renderer *renderer) override {

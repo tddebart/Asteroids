@@ -10,6 +10,7 @@ public:
     Vector2 velocity = Vector2(0, 0);
     int angle = 0;
     SDL_Texture *texture = nullptr;
+    bool remove = false;
 
     explicit Entity(SDL_Texture *texture = nullptr, Vector2 position = Vector2(0, 0));
 

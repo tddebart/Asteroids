@@ -1,8 +1,5 @@
 ﻿#define SDL_MAIN_HANDLED
 
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
-
 #include <iostream>
 #include <vector>
 
@@ -13,6 +10,8 @@
 #include "Draw.h"
 #include "Entities/Player.cpp"
 #include "Entities/Star.cpp"
+#include "Entities/Asteroid.cpp"
+#include "ScreenInfo.h"
 
 using namespace std;
 
@@ -40,6 +39,11 @@ int main() {
     // Add entities
     auto player = Player(shuttle, Vector2(100,100));
     entities.push_back(&player);
+    
+    for (int i = 0; i < 10; i++) {
+        Asteroid* asteroid = new Asteroid(Vector2(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT));
+        entities.insert(entities.begin(), asteroid);
+    }
 
 
     while (!done) {
@@ -48,9 +52,14 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 0, 0,0,255);
         SDL_RenderClear(renderer);
 
+        
         for (auto entity: entities) {
             entity->update();
             entity->draw(renderer);
+
+            if (entity->remove) {
+                entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
+            }
         }
         
         SDL_RenderPresent(renderer);

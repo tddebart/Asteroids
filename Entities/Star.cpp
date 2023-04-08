@@ -1,4 +1,5 @@
 ﻿#include "Entity.h"
+#include "../ScreenInfo.h"
 
 class Star : public Entity {
 public:

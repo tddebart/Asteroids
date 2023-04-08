@@ -1,0 +1,11 @@
+﻿//
+// Created by Thomas on 08/04/2023.
+//
+
+#ifndef SHOOT_UP_2D_SCREENINFO_H
+#define SHOOT_UP_2D_SCREENINFO_H
+
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
+
+#endif //SHOOT_UP_2D_SCREENINFO_H
