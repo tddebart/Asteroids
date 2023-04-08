@@ -3,9 +3,13 @@
 
 #include <SDL_render.h>
 #include <SDL_image.h>
+#include <vector>
+#include "Vector2.h"
 
 SDL_Texture *loadTexture(SDL_Renderer *renderer, const char *filename);
 
 void drawTexture(SDL_Renderer *renderer ,SDL_Texture *texture, int x, int y, int angle = 0);
+
+void drawPoints(SDL_Renderer *renderer, std::vector<Vector2> points, Vector2, int angle = 0);
 
 #endif //SHOOT_UP_2D_DRAW_H

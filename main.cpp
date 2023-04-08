@@ -33,11 +33,9 @@ int main() {
         Star* star = new Star(nullptr, Vector2(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT));
         entities.push_back(star);
     }
-
-    auto shuttle = loadTexture(renderer,"assets/shuttle.png");
     
     // Add entities
-    auto player = Player(shuttle, Vector2(100,100));
+    auto player = Player(nullptr, Vector2(100,100));
     entities.push_back(&player);
     
     for (int i = 0; i < 10; i++) {

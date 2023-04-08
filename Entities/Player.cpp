@@ -2,9 +2,10 @@
 #include "../Input.h"
 #include "Projectile.cpp"
 #include "../ScreenInfo.h"
+
 #include <chrono>
 
-#define PLAYER_SIZE 52
+#define PLAYER_SIZE 32
 
 using namespace std;
 
@@ -13,6 +14,20 @@ public:
     using Entity::Entity;
 
     std::vector<Projectile*> projectiles;
+    
+    std::vector<Vector2> points = {
+            Vector2(0, -PLAYER_SIZE),
+            Vector2(PLAYER_SIZE, PLAYER_SIZE),
+            Vector2(0, PLAYER_SIZE / 2.0f),
+            Vector2(-PLAYER_SIZE, PLAYER_SIZE)
+    };
+    
+    std::vector<Vector2> flamePoints = {
+            Vector2(0, PLAYER_SIZE / 2.0f),
+            Vector2(PLAYER_SIZE / 2.0f, PLAYER_SIZE),
+            Vector2(0, PLAYER_SIZE * 0.75),
+            Vector2(-PLAYER_SIZE / 2.0f, PLAYER_SIZE)
+    };
     
     const float speed = 0.1f;
     
@@ -53,7 +68,12 @@ public:
             projectile->draw(renderer);
         }
         
-        Entity::draw(renderer);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+        drawPoints(renderer, points, position, angle);
+        if (isKeyPressed(SDL_SCANCODE_W)) {
+            drawPoints(renderer, flamePoints, position, angle);
+        }
     }
     
     void input() {

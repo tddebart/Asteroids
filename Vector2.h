@@ -1,4 +1,7 @@
-﻿#define _USE_MATH_DEFINES
+﻿#ifndef SHOOT_UP_2D_VECTOR2_H
+#define SHOOT_UP_2D_VECTOR2_H
+
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <cstdlib>
 
@@ -9,6 +12,15 @@ struct Vector2
     // Get angle in degrees
     float getAngle() const {
         return atan2(y, x) * 180 / M_PI;
+    }
+    
+    // Rotate vector by angle in degrees
+    void rotate(float angle) {
+        float rad = angle * M_PI / 180.0f;
+        float newX = x * cos(rad) - y * sin(rad);
+        float newY = x * sin(rad) + y * cos(rad);
+        x = newX;
+        y = newY;
     }
     
     // Vector2 * scalar
@@ -59,3 +71,5 @@ struct Vector2Int
         return *this;
     }
 };
+
+#endif
