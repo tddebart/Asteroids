@@ -12,7 +12,7 @@ public:
     const float speed = 1.75f;
     const int lifetime = 2000;
     
-    Projectile(Vector2 position, int angle) : OffScreenEntity(nullptr, position) {
+    Projectile(Vector2 position, int angle) : OffScreenEntity(position) {
         this->angle = angle - 90;
         float rad = this->angle * M_PI / 180.0f;
         velocity = Vector2(cos(rad), sin(rad)) * speed;

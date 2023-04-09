@@ -8,7 +8,7 @@ class Asteroid : public OffScreenEntity {
 public:
     std::vector<Vector2> points;
     
-    explicit Asteroid(Vector2 position, int angle = rand() % 360, int minPoints = 7, int maxPoints = 14) : OffScreenEntity(nullptr, position) {
+    explicit Asteroid(Vector2 position, int angle = rand() % 360, int minPoints = 7, int maxPoints = 14) : OffScreenEntity(position) {
         this->angle = angle;
         type = "Asteroid";
         float rad = this->angle * M_PI / 180.0f;

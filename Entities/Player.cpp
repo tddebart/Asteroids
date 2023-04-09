@@ -100,7 +100,6 @@ public:
     }
     
     void checkCollision(const std::vector<Asteroid*>& asteroids) {
-        std::cout << "Checking collision" << std::endl;
         for (auto &asteroid : asteroids) {
             for (auto &point : points) {
                 auto newPoint = point;

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include <SDL.h>
-#include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <windows.h>
 
 #include "Draw.h"
@@ -28,12 +28,12 @@ int main() {
     
     // Add stars
     for (int i = 0; i < 200; i++) {
-        Star* star = new Star(nullptr, Vector2(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT));
+        Star* star = new Star(Vector2(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT));
         Entity::entities.push_back(star);
     }
     
     // Add entities
-    auto player = Player(nullptr, Vector2(100,100));
+    auto player = Player(Vector2(100,100));
     Entity::entities.push_back(&player);
     
     for (int i = 0; i < 10; i++) {
@@ -87,7 +87,7 @@ void initSDL() {
     
     SetProcessDPIAware();
 
-    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+    
 
     window = SDL_CreateWindow("Shooter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
 

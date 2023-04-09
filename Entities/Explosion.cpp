@@ -9,7 +9,7 @@ struct Explosion : public Entity {
     std::chrono::time_point<std::chrono::system_clock> spawned = std::chrono::system_clock::now();
     const int lifetime = 500;
     
-    explicit Explosion(Vector2 position) : Entity(nullptr, position) {
+    explicit Explosion(Vector2 position) : Entity(position) {
         const int cubeCount = rand() % 4 + 4;
         for (int i = 0; i < cubeCount; i++) {
             cubes.push_back(Vector2(rand() % 10 - 5, rand() % 10 - 5));

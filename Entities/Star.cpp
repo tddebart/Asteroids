@@ -5,7 +5,7 @@ class Star : public Entity {
 public:
     float speed;
 
-    Star(SDL_Texture *texture, Vector2 position) : Entity(texture, position) {
+    Star(Vector2 position) : Entity(position) {
         this->speed = ((float)rand() / RAND_MAX) * 3 + 0.25f;
     }
     
