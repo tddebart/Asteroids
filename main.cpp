@@ -58,14 +58,17 @@ int main() {
             }
         }
         
-        auto asteroids = std::vector<Asteroid*>();
-        for (auto entity : Entity::entities) {
-            if (entity->type == "Asteroid") {
-                asteroids.push_back((Asteroid*)entity);
+        if (!player.remove) {
+            auto asteroids = std::vector<Asteroid*>();
+            for (auto entity : Entity::entities) {
+                if (entity->type == "Asteroid") {
+                    asteroids.push_back((Asteroid*)entity);
+                }
             }
-        }
-        for (auto projectile : player.projectiles) {
-            projectile->checkCollision(asteroids);
+            for (auto projectile : player.projectiles) {
+                projectile->checkCollision(asteroids);
+            }
+            player.checkCollision(asteroids);
         }
         
         SDL_RenderPresent(renderer);

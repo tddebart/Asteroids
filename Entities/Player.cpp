@@ -2,6 +2,7 @@
 #include "../Input.h"
 #include "Projectile.cpp"
 #include "../ScreenInfo.h"
+#include "Asteroid.cpp"
 
 #include <chrono>
 
@@ -29,7 +30,7 @@ public:
             Vector2(-PLAYER_SIZE / 2.0f, PLAYER_SIZE)
     };
     
-    const float speed = 0.1f;
+    const float speed = 0.05f;
     
     std::chrono::time_point<std::chrono::system_clock> lastShot = std::chrono::system_clock::now();
 
@@ -38,7 +39,7 @@ public:
 
         position += velocity;
 
-        velocity *= 0.98;
+        velocity *= 0.99f;
 
         // Teleport to other side of screen
         if (position.x < -50) {
@@ -95,6 +96,23 @@ public:
         if (isKeyPressed(SDL_SCANCODE_SPACE) && std::chrono::system_clock::now() - lastShot > std::chrono::milliseconds(200)) {
             projectiles.push_back(new Projectile(position, angle));
             lastShot = std::chrono::system_clock::now();
+        }
+    }
+    
+    void checkCollision(const std::vector<Asteroid*>& asteroids) {
+        std::cout << "Checking collision" << std::endl;
+        for (auto &asteroid : asteroids) {
+            for (auto &point : points) {
+                auto newPoint = point;
+                newPoint.rotate(angle);
+                newPoint += position;
+                
+                if (asteroid->inside(newPoint)) {
+                    remove = true;
+
+                    Entity::entities.push_back(new Explosion(position));
+                }
+            }
         }
     }
 };
