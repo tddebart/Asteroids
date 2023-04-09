@@ -5,7 +5,7 @@
 
 #include <chrono>
 
-#define PLAYER_SIZE 32
+#define PLAYER_SIZE 16
 
 using namespace std;
 
@@ -93,7 +93,7 @@ public:
         }
         
         if (isKeyPressed(SDL_SCANCODE_SPACE) && std::chrono::system_clock::now() - lastShot > std::chrono::milliseconds(200)) {
-            projectiles.push_back(new Projectile(position + Vector2(PLAYER_SIZE/2.0f, PLAYER_SIZE/2.0f), angle));
+            projectiles.push_back(new Projectile(position, angle));
             lastShot = std::chrono::system_clock::now();
         }
     }

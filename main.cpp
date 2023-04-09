@@ -18,8 +18,6 @@ using namespace std;
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-vector<Entity*> entities;
-
 bool done = false;
 void initSDL();
 void doInput();
@@ -31,16 +29,16 @@ int main() {
     // Add stars
     for (int i = 0; i < 200; i++) {
         Star* star = new Star(nullptr, Vector2(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT));
-        entities.push_back(star);
+        Entity::entities.push_back(star);
     }
     
     // Add entities
     auto player = Player(nullptr, Vector2(100,100));
-    entities.push_back(&player);
+    Entity::entities.push_back(&player);
     
     for (int i = 0; i < 10; i++) {
-        Asteroid* asteroid = new Asteroid(Vector2(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT));
-        entities.insert(entities.begin(), asteroid);
+        auto* asteroid = new Asteroid(Vector2(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT));
+        Entity::entities.insert(Entity::entities.begin(), asteroid);
     }
 
 
@@ -51,13 +49,23 @@ int main() {
         SDL_RenderClear(renderer);
 
         
-        for (auto entity: entities) {
+        for (auto entity: Entity::entities) {
             entity->update();
             entity->draw(renderer);
 
             if (entity->remove) {
-                entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
+                Entity::entities.erase(std::remove(Entity::entities.begin(), Entity::entities.end(), entity), Entity::entities.end());
             }
+        }
+        
+        auto asteroids = std::vector<Asteroid*>();
+        for (auto entity : Entity::entities) {
+            if (entity->type == "Asteroid") {
+                asteroids.push_back((Asteroid*)entity);
+            }
+        }
+        for (auto projectile : player.projectiles) {
+            projectile->checkCollision(asteroids);
         }
         
         SDL_RenderPresent(renderer);

@@ -5,7 +5,7 @@ file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(shoot_up_2d main.cpp Entities/Entity.cpp Draw.cpp Entities/Projectile.cpp Entities/OffScreenEntity.cpp)
+add_executable(shoot_up_2d main.cpp Entities/Entity.cpp Draw.cpp Entities/Projectile.cpp Entities/OffScreenEntity.cpp Entities/Explosion.cpp)
 
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(shoot_up_2d

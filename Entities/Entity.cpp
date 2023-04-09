@@ -2,7 +2,6 @@
 
 #include "../Draw.h"
 
-
 Entity::Entity(SDL_Texture *texture, Vector2 position) {
     this->texture = texture;
     this->position = position;

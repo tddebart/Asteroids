@@ -1,9 +1,6 @@
-﻿#ifndef SHOOT_UP_2D_VECTOR2_H
-#define SHOOT_UP_2D_VECTOR2_H
-
+﻿#pragma once
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <cstdlib>
 
 struct Vector2
 {
@@ -21,6 +18,17 @@ struct Vector2
         float newY = x * sin(rad) + y * cos(rad);
         x = newX;
         y = newY;
+    }
+    
+    void normalize() {
+        float length = sqrt(x * x + y * y);
+        x /= length;
+        y /= length;
+    }
+    
+    Vector2 getNormalized() const {
+        float length = sqrt(x * x + y * y);
+        return Vector2(x / length, y / length);
     }
     
     // Vector2 * scalar
@@ -71,5 +79,3 @@ struct Vector2Int
         return *this;
     }
 };
-
-#endif
