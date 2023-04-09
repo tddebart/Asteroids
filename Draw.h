@@ -4,11 +4,10 @@
 #include <SDL_render.h>
 #include <SDL_image.h>
 #include <vector>
+#include <SDL_ttf.h>
 #include "Vector2.h"
 
-SDL_Texture *loadTexture(SDL_Renderer *renderer, const char *filename);
-
-void drawTexture(SDL_Renderer *renderer ,SDL_Texture *texture, int x, int y, int angle = 0);
+void drawText(SDL_Renderer *renderer,TTF_Font* font, const char* text, Vector2 pos, SDL_Color color);
 
 void drawPoints(SDL_Renderer *renderer, std::vector<Vector2> points, Vector2, int angle = 0);
 

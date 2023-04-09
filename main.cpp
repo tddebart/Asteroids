@@ -18,6 +18,8 @@ using namespace std;
 SDL_Window *window;
 SDL_Renderer *renderer;
 
+static TTF_Font* font;
+
 bool done = false;
 void initSDL();
 void doInput();
@@ -33,7 +35,7 @@ int main() {
     }
     
     // Add entities
-    auto player = Player(Vector2(100,100));
+    auto player = Player();
     Entity::entities.push_back(&player);
     
     for (int i = 0; i < 10; i++) {
@@ -47,7 +49,6 @@ int main() {
 
         SDL_SetRenderDrawColor(renderer, 0, 0,0,255);
         SDL_RenderClear(renderer);
-
         
         for (auto entity: Entity::entities) {
             entity->update();
@@ -66,10 +67,15 @@ int main() {
                 }
             }
             for (auto projectile : player.projectiles) {
-                projectile->checkCollision(asteroids);
+                if(projectile->checkCollision(asteroids)) {
+                    player.score += 100;   
+                }
             }
             player.checkCollision(asteroids);
         }
+
+        drawText(renderer, font, "Score: ", Vector2(16, 64), {255, 255, 255});
+        drawText(renderer, font, to_string(player.score).c_str(), Vector2(100, 64), {255, 255, 255});
         
         SDL_RenderPresent(renderer);
         
@@ -87,7 +93,16 @@ void initSDL() {
     
     SetProcessDPIAware();
 
+    if (TTF_Init() < 0) {
+        printf("Failed to start SDL_ttf: %s", TTF_GetError());
+        exit(-1);
+    }
     
+    font = TTF_OpenFont("assets/Ubuntu-Regular.ttf", 24);
+    if (font == nullptr) {
+        printf("Failed to load font: %s", TTF_GetError());
+        exit(-1);
+    }
 
     window = SDL_CreateWindow("Shooter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
 

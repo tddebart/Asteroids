@@ -1,4 +1,6 @@
-﻿#include "Entity.h"
+﻿#pragma once
+
+#include "Entity.h"
 #include "OffScreenEntity.h"
 #include "Asteroid.cpp"
 #include <chrono>
@@ -34,7 +36,7 @@ public:
         SDL_RenderDrawLine(renderer, position.x, position.y, position.x + velocity.x*4, position.y + velocity.y*4);
     }
     
-    void checkCollision(const std::vector<Asteroid*>& asteroids) {
+    bool checkCollision(const std::vector<Asteroid*>& asteroids) {
         for (auto &asteroid : asteroids) {
             if (asteroid->inside(position + velocity*4)) {
                 remove = true;
@@ -47,7 +49,11 @@ public:
                         Entity::entities.push_back(new Asteroid(asteroid->position + Vector2(rand() % 20 - 10, rand() % 20 - 10), asteroid->angle - 90 - 180 * i, 4,7));
                     }
                 }
+                
+                return true;
             }
         }
+        
+        return false;
     }
 };

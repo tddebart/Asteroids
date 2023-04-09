@@ -1,4 +1,6 @@
-﻿#include "Entity.h"
+﻿#pragma once
+
+#include "Entity.h"
 #include "../Input.h"
 #include "Projectile.cpp"
 #include "../ScreenInfo.h"
@@ -12,7 +14,6 @@ using namespace std;
 
 class Player : public Entity {
 public:
-    using Entity::Entity;
 
     std::vector<Projectile*> projectiles;
     
@@ -31,8 +32,13 @@ public:
     };
     
     const float speed = 0.05f;
+    int score = 0;
+    int lives = 3;
     
     std::chrono::time_point<std::chrono::system_clock> lastShot = std::chrono::system_clock::now();
+    
+    Player() : Entity(Vector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f)) {
+    }
 
     void update() override {
         input();
@@ -75,6 +81,11 @@ public:
         if (isKeyPressed(SDL_SCANCODE_W)) {
             drawPoints(renderer, flamePoints, position, angle);
         }
+        
+        // Draw lives
+        for (int i = 0; i < lives; i++) {
+            drawPoints(renderer, points, Vector2(PLAYER_SIZE * 2 + i * (PLAYER_SIZE + 5) * 2, PLAYER_SIZE * 2), 0);
+        }
     }
     
     void input() {
@@ -107,9 +118,14 @@ public:
                 newPoint += position;
                 
                 if (asteroid->inside(newPoint)) {
-                    remove = true;
-
+                    lives--;
                     Entity::entities.push_back(new Explosion(position));
+                    position = Vector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f);
+                    velocity = Vector2(0, 0);
+                    
+                    if (lives <= 0) {
+                        remove = true;
+                    }
                 }
             }
         }
